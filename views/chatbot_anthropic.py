@@ -56,7 +56,7 @@ if prompt := st.chat_input("Enter your message..."):
 
     message = client.messages.create(
             model=MODEL,
-            max_tokens=2048,
+            max_tokens=4096,
             messages=st.session_state.messages
         )
 
