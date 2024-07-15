@@ -2,10 +2,11 @@ import anthropic
 import random
 import time
 import streamlit as st
+import config
 
 # Define parameters
 MODEL = "claude-3-haiku-20240307"
-API_KEY = "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"
+API_KEY = config.ANTHROPIC_API_KEY
 
 # Anthropic Client
 client = anthropic.Anthropic(
