@@ -14,11 +14,18 @@ project_1_page = st.Page(
     icon="🧮"
 )
 
+project_2_page = st.Page(
+    "views/testimonial_generator.py",
+    title="Testimonial Generator",
+    icon="📝"
+)
+
 # --- NAVIGATION SETUP [WITH SECTIONS]---
 pg = st.navigation(
     {
         "Info": [about_page],
-        "Personal Projects": [project_1_page]
+        "Personal Projects": [project_1_page],
+        "School Tools" : [project_2_page]
     }
 )
 
