@@ -17,12 +17,12 @@ project_0_page = st.Page(
 project_1_page = st.Page(
     "views/stats_chatbot.py",
     title="Stats Chatbot",
-    icon="🧮",
+    icon="🧮"
 )
 project_2_page = st.Page(
     "views/project_2.py",
     title="Project 2",
-    icon="2️⃣",
+    icon="2️⃣"
 )
 
 
