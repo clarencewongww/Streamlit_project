@@ -15,9 +15,9 @@ project_0_page = st.Page(
     icon="🧪"
 )
 project_1_page = st.Page(
-    "views/chatbot_anthropic.py",
-    title="Chatbot",
-    icon="🤖",
+    "views/stats_chatbot.py",
+    title="Stats Chatbot",
+    icon="🧮",
 )
 project_2_page = st.Page(
     "views/project_2.py",
