@@ -22,8 +22,7 @@ def check_password():
         return True
 
     # Show input for password.
-    st.success("This chatbot is trained to give insights into statistics concepts. It can write code too! Enter the password given to continue.")
-
+    st.success("This chatbot is trained to give insights into statistics concepts. It can even write code too! Enter the password given to continue.")
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
