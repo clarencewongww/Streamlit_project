@@ -4,6 +4,9 @@ import time
 import streamlit as st
 import hmac
 
+# Before main page 
+st.success("Chatbot")
+
 # Check password
 def check_password():
     """Returns `True` if the user had the correct password."""
