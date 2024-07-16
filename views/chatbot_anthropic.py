@@ -2,7 +2,6 @@ import anthropic
 import random
 import time
 import streamlit as st
-import config
 import hmac
 
 # Check password
