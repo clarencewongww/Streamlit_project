@@ -36,6 +36,7 @@ if not check_password():
 # Define parameters
 MODEL = "claude-3-haiku-20240307"
 API_KEY = st.secrets["ANTHROPIC_API_KEY"]
+SYSTEM = "You are an expert in statistics. You are well versed in explaining stats concepts and also in analysis of data. You have read all the textbooks on statistics and can quote from there. "
 
 # Anthropic Client
 client = anthropic.Anthropic(
@@ -72,7 +73,7 @@ if prompt := st.chat_input("Enter your message..."):
             model=MODEL,
             max_tokens=4096,
             temperature=0,
-            system="You are a professor of statistics in a top university, any question on stats will be given with examples and equations to explain the concept clearly.",
+            system=SYSTEM,
             messages=st.session_state.messages
         ) as stream:
             for text in stream.text_stream:
