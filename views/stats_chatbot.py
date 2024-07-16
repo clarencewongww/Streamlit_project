@@ -4,8 +4,6 @@ import time
 import streamlit as st
 import hmac
 
-# Before main page 
-st.success("This chatbot is trained to give insights into statistics concepts. It can write code too!")
 
 # Check password
 def check_password():
@@ -24,16 +22,19 @@ def check_password():
         return True
 
     # Show input for password.
+    st.success("This chatbot is trained to give insights into statistics concepts. It can write code too! Enter the password given to continue.")
+
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
     if "password_correct" in st.session_state:
-        st.error("😕 Password incorrect")
+        st.error("😕 Password incorrect.")
     return False
 
-
+# Before main page 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
+    
 
 # Main Streamlit app starts here
 # Define parameters
