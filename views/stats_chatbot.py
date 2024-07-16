@@ -5,7 +5,7 @@ import streamlit as st
 import hmac
 
 # Before main page 
-st.success("Chatbot")
+st.success("This chatbot is trained to give insights into statistics concepts. It can write code too!")
 
 # Check password
 def check_password():
