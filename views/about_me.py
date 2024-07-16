@@ -31,7 +31,7 @@ st.write("\n")
 st.subheader("Education", anchor=False)
 st.write(
     """
-    - 2024: Master's of Education @ Harvard University (4.00/4.00)
+    - 2024: Master of Education @ Harvard University (4.00/4.00)
     - 2023: Specialist Diploma in AI Solutions Development @ Temasek Polytechnic (4.00/4.00)
     - 2021: Post-graduate Diploma in Education @ NIE (Credit)
     - 2019: Bachelor of Science with Honours in Chemistry @ NUS (Highest Distinction)
