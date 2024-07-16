@@ -43,7 +43,7 @@ client = anthropic.Anthropic(
     api_key=API_KEY,
 )
 
-st.title("Chatbot")
+st.title("Stats Chatbot 🧮")
 
 # Initialize chat history
 if "messages" not in st.session_state:
