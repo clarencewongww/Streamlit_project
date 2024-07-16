@@ -47,7 +47,7 @@ st.write(
     - Strong hands-on experience and knowledge in Python, R and Excel
     - Strong understanding of statistical modelling (including advanced statistical quasi-methods) and their applications
     - Strong communicator of data with experience in data visualisation 
-    - Vicarious learner that always seeks to update myself on new technologies with continuing education
+    - Inquisitive learner that always seeks to update myself on new technologies with continuing education
     """
 )
 
