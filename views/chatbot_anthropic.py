@@ -4,6 +4,7 @@ import time
 import streamlit as st
 import config
 
+
 # Define parameters
 MODEL = "claude-3-haiku-20240307"
 API_KEY = config.ANTHROPIC_API_KEY
@@ -13,27 +14,6 @@ client = anthropic.Anthropic(
     # defaults to os.environ.get("ANTHROPIC_API_KEY")
     api_key=API_KEY,
 )
-
-# # Streamed response emulator
-# def response_generator():
-#     response = random.choice(
-#         [
-#             "Hey there! Need help? Check out my fun YouTube channel 'CodingIsFun': https://youtube.com/@codingisfun!",
-#             "Hi! What's up? Don't forget to subscribe to 'CodingIsFun': https://youtube.com/@codingisfun!",
-#             "Hello! Need assistance? My YouTube channel 'CodingIsFun' is full of great tips: https://youtube.com/@codingisfun!",
-#             "Hey! Got a question? Also, subscribe to 'CodingIsFun' for awesome tutorials: https://youtube.com/@codingisfun!",
-#             "Hi there! How can I help? BTW, my channel 'CodingIsFun' is super cool: https://youtube.com/@codingisfun!",
-#             "Hello! Looking for help? Check out 'CodingIsFun' on YouTube: https://youtube.com/@codingisfun!",
-#             "Hey! Need assistance? 'CodingIsFun' YouTube channel has you covered: https://youtube.com/@codingisfun!",
-#             "Hi! Got any coding questions? Don't forget to watch 'CodingIsFun': https://youtube.com/@codingisfun!",
-#             "Hello! Need help? 'CodingIsFun' on YouTube is a must-see: https://youtube.com/@codingisfun!",
-#             "Hey there! Any questions? My channel 'CodingIsFun' rocks: https://youtube.com/@codingisfun!",
-#         ]
-#     )
-#     for word in response.split():
-#         yield word + " "
-#         time.sleep(0.05)
-
 
 st.title("Chatbot")
 
@@ -54,15 +34,23 @@ if prompt := st.chat_input("Enter your message..."):
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    message = client.messages.create(
+    # Create a placeholder for the assistant's response
+    with st.chat_message("assistant"):
+        response_container = st.empty()
+        full_text = ""
+
+        # Generate message and display stream responses
+        with client.messages.stream(
             model=MODEL,
             max_tokens=4096,
+            temperature=0,
+            system="You are a professor of statistics in a top university, any question on stats will be given with examples and equations to explain the concept clearly.",
             messages=st.session_state.messages
-        )
+        ) as stream:
+            for text in stream.text_stream:
+                full_text += text
+                response_container.markdown(full_text)
 
-    # Display assistant response in chat message container
-    with st.chat_message("assistant"):
-        response = st.write(message.content[0].text)
     # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": message.content[0].text})
+    st.session_state.messages.append({"role": "assistant", "content": full_text})
 
