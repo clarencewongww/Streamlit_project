@@ -9,7 +9,6 @@ about_page = st.Page(
     default=True,
 )
 
-
 project_1_page = st.Page(
     "views/stats_chatbot.py",
     title="Stats Chatbot",
