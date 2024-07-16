@@ -12,7 +12,7 @@ st.title("About Me!")
 # --- HERO SECTION ---
 col1, col2 = st.columns(2, gap="small", vertical_alignment="center")
 with col1:
-    st.image("./assets/profile_img_circle.png", width=300)
+    st.image("./assets/profile_img_circle.png", use_column_width=True)
 
 with col2:
     st.header("Clarence Wong", anchor=False)
