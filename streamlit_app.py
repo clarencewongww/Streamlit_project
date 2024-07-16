@@ -1,12 +1,11 @@
 import streamlit as st
 
-
 # --- PAGE SETUP ---
 about_page = st.Page(
     "views/about_me.py",
     title="About Me!",
     icon="🥼",
-    default=True,
+    default=True
 )
 
 project_1_page = st.Page(
@@ -23,11 +22,9 @@ pg = st.navigation(
     }
 )
 
-
 # --- SHARED ON ALL PAGES ---
 #st.success("Personal Profile and Porfolio!")
 st.sidebar.text("Made with ❤️ by Clarence Wong")
-
 
 # --- RUN NAVIGATION ---
 pg.run()
