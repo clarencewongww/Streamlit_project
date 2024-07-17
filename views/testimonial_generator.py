@@ -2,7 +2,6 @@ import streamlit as st
 import anthropic
 import hmac
 import docx
-from docx.enum.text import WD_ALIGN_PARAGRAPH
 import datetime
 import io
 import os
@@ -139,7 +138,7 @@ def generate_testimonial():
     # Add some formatting to the paragraph
     p.paragraph_format.line_spacing = 2
     p.paragraph_format.space_after = 0
-    p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    p.paragraph_format.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.LEFT
 
     # Add a run to the paragraph
     run = p.add_run(full_testimonial)
