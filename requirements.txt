@@ -2,5 +2,5 @@ numpy
 pandas
 streamlit
 anthropic
-docx
+python-docx-ng
 datetime
