@@ -4,3 +4,4 @@ streamlit
 anthropic
 python-docx-ng
 datetime
+openai
