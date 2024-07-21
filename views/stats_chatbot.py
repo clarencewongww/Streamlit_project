@@ -3,6 +3,7 @@ import random
 import time
 import streamlit as st
 import hmac
+from openai import OpenAI
 
 
 # Check password
@@ -30,22 +31,35 @@ def check_password():
         st.error("😕 Password incorrect.")
     return False
 
-# Before main page 
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
     
 
+# Setup model selection 
+with st.sidebar: 
+    st.divider() 
+    st.info("You can select and switch the LLM used at anytime!")
+    model_selected = st.radio(
+    "Select the LLM to use",
+    ["Anthropic Haiku", "OpenAI GPT-4o mini"],
+    captions = ["Less powerful but more concise model", "More powerful but more verbose"])
+
 # Main Streamlit app starts here
 # Define parameters
-MODEL = "claude-3-haiku-20240307"
-API_KEY = st.secrets["ANTHROPIC_API_KEY"]
+ANTHRO_MODEL = "claude-3-haiku-20240307"
+OPENAI_MODEL = "gpt-4o-mini"
+ANTHRO_API_KEY = st.secrets["ANTHROPIC_API_KEY"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 SYSTEM = "You are an expert in statistics. You are well versed in explaining stats concepts and also in analysis of data. You have read all the textbooks on statistics and can quote from there. "
 
 # Anthropic Client
 client = anthropic.Anthropic(
     # defaults to os.environ.get("ANTHROPIC_API_KEY")
-    api_key=API_KEY,
+    api_key=ANTHRO_API_KEY,
 )
+
+# OpenAI Client 
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 st.title("Stats Chatbot 🧮")
 
@@ -70,17 +84,31 @@ if prompt := st.chat_input("Enter your message..."):
     with st.chat_message("assistant"):
         response_container = st.empty()
         full_text = ""
-
-        # Generate message and display stream responses
-        with client.messages.stream(
-            model=MODEL,
-            max_tokens=4096,
-            temperature=0,
-            system=SYSTEM,
-            messages=st.session_state.messages
-        ) as stream:
-            for text in stream.text_stream:
-                full_text += text
+        
+        if model_selected == "Anthropic Haiku": 
+            # Generate message and display stream responses
+            with client.messages.stream(
+                model=ANTHRO_MODEL,
+                max_tokens=4096,
+                temperature=0,
+                system=SYSTEM,
+                messages=st.session_state.messages
+            ) as stream:
+                for text in stream.text_stream:
+                    full_text += text
+                    response_container.markdown(full_text)
+        else: 
+            response = openai_client.chat.completions.create(
+                        model=OPENAI_MODEL,
+                        messages=st.session_state.messages,
+                        stream=True
+                        ) 
+        
+            for chunk in response:
+                delta = chunk.choices[0].delta
+                chunk_text = getattr(delta, 'content', '')
+                if chunk_text:
+                    full_text += chunk_text
                 response_container.markdown(full_text)
 
     # Add assistant response to chat history
