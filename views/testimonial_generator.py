@@ -24,7 +24,7 @@ def check_password():
         return True
 
     # Show input for password.
-    st.success("This tool helps to generate testimonal based on your input.")
+    st.success("This tool helps to generate testimonal based on your input using various LLMs and allows for downloading of generated testimonial in docx format.")
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
