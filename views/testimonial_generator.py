@@ -5,6 +5,7 @@ import docx
 import datetime
 import io
 import os
+from openai import OpenAI
 
 # Check password
 def check_password():
@@ -36,8 +37,10 @@ if not check_password():
 
 # Main Streamlit app starts here
 # Define parameters
-MODEL = "claude-3-haiku-20240307"
-API_KEY = st.secrets["ANTHROPIC_API_KEY"]
+ANTHRO_MODEL = "claude-3-haiku-20240307"
+OPENAI_MODEL = "gpt-4o-mini"
+ANTHRO_API_KEY = st.secrets["ANTHROPIC_API_KEY"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 cur_time = datetime.datetime.now()
 cur_year = cur_time.year
 SYSTEM = f"""
@@ -85,17 +88,20 @@ Being a mature and independent boy, [Name] is focussed and single-minded about a
         """
 
 # Anthropic Client
-client = anthropic.Anthropic(
+anthro_client = anthropic.Anthropic(
     # defaults to os.environ.get("ANTHROPIC_API_KEY")
-    api_key=API_KEY,
+    api_key=ANTHRO_API_KEY,
 )
+
+# OpenAI Client 
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Attribute section with columns
 st.header("Type in the attributes")
 # Set columns for input
 col1, col2 = st.columns([2,2])
 col3, col4 = st.columns([2,2])
-col5, col6 = st.columns([2,2])
+col5, col6 = st.columns([2,2], vertical_alignment="center")
 # columns 
 with col1:
     stu_name = st.text_input('Enter the name of student:')
@@ -108,25 +114,47 @@ with col4:
 with col5:
     stu_sch = st.selectbox("Select school:", ("Temasek Secondary School", "Montfort Secondary School", "Dunman High School"), index = None, placeholder="Select School...")
 with col6:
-    pass
+    model_selected = st.radio(
+    "Select the LLM to use",
+    ["Anthropic Haiku", "OpenAI GPT-4o mini"],
+    captions = ["Less powerful but more concise model", "More powerful but more verbose"])
 
 
 def generate_testimonial():
 
     testimonial_placeholder = st.empty() 
     full_testimonial = ""   
-
-    with client.messages.stream(
-        model=MODEL,
-        max_tokens=4096,
-        system = SYSTEM,
-        messages=[
-            {"role": "user", "content": f"Student name is {stu_name} from {stu_sch}, with leadership in {stu_lead} and has learning attitude of {stu_att}. He/she is from the Co-curricula activity of {stu_cca}."}
-        ]
-    ) as stream: 
-        for text in stream.text_stream:
-                full_testimonial += text
-                testimonial_placeholder.markdown(full_testimonial)
+    
+    if model_selected == "Anthropic Haiku":
+        # Anthro completion    
+        with anthro_client.messages.stream(
+            model=ANTHRO_MODEL,
+            max_tokens=4096,
+            system = SYSTEM,
+            messages=[
+                {"role": "user", "content": f"Student name is {stu_name} from {stu_sch}, with leadership in {stu_lead} and has learning attitude of {stu_att}. He/she is from the Co-curricula activity of {stu_cca}."}
+            ]
+        ) as stream: 
+            for text in stream.text_stream:
+                    full_testimonial += text
+                    testimonial_placeholder.markdown(full_testimonial)
+    else: 
+        # OpenAI completion
+        response = openai_client.chat.completions.create(
+                        model=OPENAI_MODEL,
+                        messages=[
+                            {"role": "system", "content": SYSTEM},
+                            {"role": "user", "content": f"Student name is {stu_name} from {stu_sch}, with leadership in {stu_lead} and has learning attitude of {stu_att}. He/she is from the Co-curricula activity of {stu_cca}."}
+                        ],
+                        stream=True
+                        ) 
+        
+        for chunk in response:
+            delta = chunk.choices[0].delta
+            chunk_text = getattr(delta, 'content', '')
+            if chunk_text:
+                full_testimonial += chunk_text
+            testimonial_placeholder.markdown(full_testimonial)
         
     # -----CREATE DOCUMENT -----
     # Create a document
